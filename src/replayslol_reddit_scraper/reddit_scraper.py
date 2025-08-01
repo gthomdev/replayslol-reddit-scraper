@@ -65,9 +65,9 @@ class RedditScraper:
 
     def validate_submissions(self):
         for submission in self.scrape_submissions():
-            if (submission.id not in self.checked_submissions and
-                    submission.id not in self.published_submissions and
-                    submission.summoner not in self.summoners_on_cooldown):
+            if (submission.id not in self.checked_submissions
+                    and submission.id not in self.published_submissions
+                    and submission.summoner not in self.summoners_on_cooldown):
                 self.checked_submissions.add(submission.id)
                 self.summoners_on_cooldown.add(submission.summoner)
                 if submission.has_matching_link():
