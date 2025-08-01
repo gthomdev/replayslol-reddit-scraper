@@ -652,15 +652,15 @@ class TestRealWorldOpggUrls:
     ("https://www.op.gg/summoners/na/TestUser", "na", "TestUser"),
     ("https://www.op.gg/summoners/euw/Player-Name", "euw", "Player-Name"),
     ("https://euw.op.gg/summoners/euw/TestUser", "euw", "TestUser"),
-    
+
     # New op.gg /lol/ format should work
     ("https://op.gg/lol/summoners/na/TestUser", "na", "TestUser"),
     ("https://www.op.gg/lol/summoners/euw/Player-Name", "euw", "Player-Name"),
-    
+
     # u.gg format should still work
     ("https://u.gg/lol/profile/na1/TestUser/overview", "na", "TestUser"),
     ("https://u.gg/lol/profile/euw1/Player-Name", "euw", "Player-Name"),
-    
+
     # blitz.gg format should still work
     ("https://blitz.gg/lol/profile/na1/TestUser", "na", "TestUser"),
     ("https://blitz.gg/lol/profile/euw1/Player-Name", "euw", "Player-Name"),
@@ -679,12 +679,12 @@ def test_mixed_url_formats_in_same_input():
         "https://op.gg/lol/summoners/na/NewUser",     # New format
         "https://u.gg/lol/profile/na1/UggUser/overview",  # u.gg format
     ]
-    
+
     # Test that each URL is processed correctly regardless of other URLs in the list
     for url in urls:
         assert URLElementExtractor.extract_region(url) == "na"
         assert URLElementExtractor.has_matching_link(url) is True
-        
+
     # Test specific summoner names
     assert URLElementExtractor.extract_summoner(urls[0]) == "LegacyUser"
     assert URLElementExtractor.extract_summoner(urls[1]) == "NewUser"
