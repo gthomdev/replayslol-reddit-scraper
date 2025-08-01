@@ -322,7 +322,7 @@ def test_combined_extraction_new_opgg_lol_format(link, expected_region, expected
     """Test that region and summoner extraction work correctly together for edge cases"""
     region_result = URLElementExtractor.extract_region(link)
     summoner_result = URLElementExtractor.extract_summoner(link)
-    
+
     assert region_result == expected_region
     assert summoner_result == expected_summoner
 
@@ -351,7 +351,7 @@ class TestRealWorldOpggUrls:
     def test_specific_mentioned_url_format(self):
         """Test the specific URL format mentioned in requirements: https://op.gg/lol/summoners/na/Apty-Swe"""
         url = "https://op.gg/lol/summoners/na/Apty-Swe"
-        
+
         # Test all extraction methods
         assert URLElementExtractor.extract_region(url) == "na"
         assert URLElementExtractor.extract_summoner(url) == "Apty-Swe"
@@ -361,7 +361,7 @@ class TestRealWorldOpggUrls:
     def test_www_subdomain_variations(self):
         """Test variations with www subdomain: https://www.op.gg/lol/summoners/na/Apty-Swe"""
         url = "https://www.op.gg/lol/summoners/na/Apty-Swe"
-        
+
         # Test all extraction methods
         assert URLElementExtractor.extract_region(url) == "na"
         assert URLElementExtractor.extract_summoner(url) == "Apty-Swe"
@@ -372,24 +372,24 @@ class TestRealWorldOpggUrls:
         # URLs with hyphens in summoner names - WORKING CASES
         ("https://op.gg/lol/summoners/na/Test-User", "na", "Test-User"),
         ("https://www.op.gg/lol/summoners/euw/Player-Name-123", "euw", "Player-Name-123"),
-        
+
         # URLs with underscores in summoner names - WORKING CASES
         ("https://op.gg/lol/summoners/na/Test_User", "na", "Test_User"),
         ("https://www.op.gg/lol/summoners/euw/Player_Name_123", "euw", "Player_Name_123"),
-        
+
         # URLs with numbers in summoner names - WORKING CASES
         ("https://op.gg/lol/summoners/na/Player123", "na", "Player123"),
         ("https://www.op.gg/lol/summoners/euw/Test123User", "euw", "Test123User"),
         ("https://op.gg/lol/summoners/kr/123Player", "kr", "123Player"),
-        
+
         # URLs with mixed special characters - WORKING CASES
         ("https://op.gg/lol/summoners/na/Test-User_123", "na", "Test-User_123"),
         ("https://www.op.gg/lol/summoners/euw/Player_Name-456", "euw", "Player_Name-456"),
-        
+
         # URLs with encoded spaces (%20) - WORKING CASES
         ("https://op.gg/lol/summoners/na/Test%20User", "na", "Test%20User"),
         ("https://www.op.gg/lol/summoners/euw/Player%20Name", "euw", "Player%20Name"),
-        
+
         # URLs with other encoded characters - WORKING CASES
         ("https://op.gg/lol/summoners/na/Test%2BUser", "na", "Test%2BUser"),  # + encoded as %2B
         ("https://www.op.gg/lol/summoners/euw/Player%40Name", "euw", "Player%40Name"),  # @ encoded as %40
@@ -406,7 +406,7 @@ class TestRealWorldOpggUrls:
         # DISCOVERED LIMITATIONS: These cases fail with current regex patterns
         # Long names with multiple hyphens fail TARGET_URL_PATTERNS length check
         ("https://op.gg/lol/summoners/kr/Multi-Hyphen-Name", "kr", "Multi-Hyphen-Name"),
-        # Long names with spaces fail TARGET_URL_PATTERNS length check  
+        # Long names with spaces fail TARGET_URL_PATTERNS length check
         ("https://op.gg/lol/summoners/kr/Multi%20Word%20Name", "kr", "Multi%20Word%20Name"),
         # Complex long names fail TARGET_URL_PATTERNS length check
         ("https://op.gg/lol/summoners/na/Complex-Name_123%20Test", "na", "Complex-Name_123%20Test"),
@@ -431,24 +431,24 @@ class TestRealWorldOpggUrls:
         ("https://www.op.gg/lol/summoners/na/Apty-Swe/matches", "na", "Apty-Swe"),
         ("https://op.gg/lol/summoners/euw/TestUser/overview", "euw", "TestUser"),
         ("https://www.op.gg/lol/summoners/kr/Player-Name/stats", "kr", "Player-Name"),
-        
+
         # URLs with trailing slashes - WORKING CASES
         ("https://op.gg/lol/summoners/na/Apty-Swe/", "na", "Apty-Swe"),
         ("https://www.op.gg/lol/summoners/euw/TestUser/", "euw", "TestUser"),
-        
+
         # URLs with query parameters only - WORKING CASES
         ("https://op.gg/lol/summoners/na/Apty-Swe?tab=champions", "na", "Apty-Swe"),
         ("https://www.op.gg/lol/summoners/euw/TestUser?hl=en_US", "euw", "TestUser"),
         ("https://op.gg/lol/summoners/kr/Player?param1=value1&param2=value2", "kr", "Player"),
-        
+
         # URLs with both path segments and query parameters - WORKING CASES
         ("https://op.gg/lol/summoners/na/Apty-Swe/champions?tab=overview", "na", "Apty-Swe"),
         ("https://www.op.gg/lol/summoners/euw/TestUser/matches?sort=recent", "euw", "TestUser"),
         ("https://op.gg/lol/summoners/kr/Player/stats?season=13&queue=ranked", "kr", "Player"),
-        
+
         # URLs with fragments (hash) - WORKING for region, but summoner includes fragment
         ("https://www.op.gg/lol/summoners/euw/TestUser/champions#aatrox", "euw", "TestUser"),
-        
+
         # Complex combinations - WORKING CASES
         ("https://www.op.gg/lol/summoners/na/Complex-Name_123/champions?tab=overview&hl=en_US", "na", "Complex-Name_123"),
         ("https://op.gg/lol/summoners/euw/Encoded%20Player/matches?sort=recent&limit=20", "euw", "Encoded%20Player"),
@@ -465,10 +465,10 @@ class TestRealWorldOpggUrls:
         ("https://op.gg/lol/summoners/na/Apty-Swe/matches/recent", "na", "Multiple path segments not supported"),
         ("https://www.op.gg/lol/summoners/euw/TestUser/champions/aatrox", "euw", "Multiple path segments not supported"),
         ("https://op.gg/lol/summoners/kr/Player/stats/ranked/solo", "kr", "Multiple path segments not supported"),
-        
+
         # DISCOVERED LIMITATIONS: Trailing slash after path segment fails
         ("https://op.gg/lol/summoners/kr/Player-Name/champions/", "kr", "Trailing slash after path segment fails"),
-        
+
         # DISCOVERED LIMITATIONS: Fragment handling issues
         ("https://op.gg/lol/summoners/na/Apty-Swe#overview", "na", "Fragment included in summoner name"),
         ("https://www.op.gg/lol/summoners/kr/Test-User/stats/ranked?season=13#summary", "kr", "Multiple segments + fragment fails"),
@@ -477,10 +477,10 @@ class TestRealWorldOpggUrls:
         """Document limitations with complex path structures and fragments"""
         # Region extraction typically works
         assert URLElementExtractor.extract_region(url) == expected_region
-        
+
         # Document the specific limitations found
         summoner_result = URLElementExtractor.extract_summoner(url)
-        
+
         if "Multiple path segments" in issue_description:
             # Current regex pattern (?:\/[^\/]*)? only handles one additional segment
             assert summoner_result is None, f"Expected None for multiple segments: {url}"
@@ -501,13 +501,13 @@ class TestRealWorldOpggUrls:
         assert URLElementExtractor.extract_region(url_basic) == region
         assert URLElementExtractor.extract_summoner(url_basic) == "TestPlayer"
         assert URLElementExtractor.has_matching_link(url_basic) is True
-        
+
         # Test with www subdomain
         url_www = f"https://www.op.gg/lol/summoners/{region}/TestPlayer"
         assert URLElementExtractor.extract_region(url_www) == region
         assert URLElementExtractor.extract_summoner(url_www) == "TestPlayer"
         assert URLElementExtractor.has_matching_link(url_www) is True
-        
+
         # Test with complex summoner name and additional parameters
         url_complex = f"https://www.op.gg/lol/summoners/{region}/Test-Player_123/champions?tab=overview"
         assert URLElementExtractor.extract_region(url_complex) == region
@@ -520,27 +520,27 @@ class TestRealWorldOpggUrls:
             # Minimum length names (3 characters as per TARGET_URL_PATTERNS)
             ("https://op.gg/lol/summoners/na/abc", "na", "abc"),
             ("https://www.op.gg/lol/summoners/euw/123", "euw", "123"),
-            
+
             # Maximum typical length names (16 characters as per TARGET_URL_PATTERNS)
             ("https://op.gg/lol/summoners/na/VeryLongPlayerNa", "na", "VeryLongPlayerNa"),
             ("https://www.op.gg/lol/summoners/kr/1234567890123456", "kr", "1234567890123456"),
-            
+
             # Names with consecutive special characters
             ("https://op.gg/lol/summoners/na/Test--User", "na", "Test--User"),
             ("https://www.op.gg/lol/summoners/euw/Player__Name", "euw", "Player__Name"),
             ("https://op.gg/lol/summoners/kr/User-_-Name", "kr", "User-_-Name"),
-            
+
             # Names starting or ending with special characters
             ("https://op.gg/lol/summoners/na/-TestUser", "na", "-TestUser"),
             ("https://www.op.gg/lol/summoners/euw/TestUser-", "euw", "TestUser-"),
             ("https://op.gg/lol/summoners/kr/_TestUser_", "kr", "_TestUser_"),
-            
+
             # Names with mixed case
             ("https://op.gg/lol/summoners/na/TeStUsEr", "na", "TeStUsEr"),
             ("https://www.op.gg/lol/summoners/euw/UPPERCASE", "euw", "UPPERCASE"),
             ("https://op.gg/lol/summoners/kr/lowercase", "kr", "lowercase"),
         ]
-        
+
         for url, expected_region, expected_summoner in edge_cases:
             assert URLElementExtractor.extract_region(url) == expected_region
             assert URLElementExtractor.extract_summoner(url) == expected_summoner
@@ -551,7 +551,7 @@ class TestRealWorldOpggUrls:
         """Comprehensive test of real-world URL variations that might be encountered"""
         # Test the exact URL mentioned in the requirements with all methods
         base_url = "https://op.gg/lol/summoners/na/Apty-Swe"
-        
+
         # Test variations that WORK with current implementation
         working_variations = [
             base_url,
@@ -568,24 +568,24 @@ class TestRealWorldOpggUrls:
             base_url.replace("https://op.gg", "https://www.op.gg"),
             f"{base_url.replace('https://op.gg', 'https://www.op.gg')}/champions?tab=overview&hl=en_US",
         ]
-        
+
         for url in working_variations:
             # All working variations should extract the same region and summoner
             assert URLElementExtractor.extract_region(url) == "na", f"Failed for URL: {url}"
             assert URLElementExtractor.extract_summoner(url) == "Apty-Swe", f"Failed for URL: {url}"
             assert URLElementExtractor.has_matching_link(url) is True, f"Failed for URL: {url}"
             assert URLElementExtractor.extract_match_history_link(url) == url, f"Failed for URL: {url}"
-        
+
         # Test variations that have KNOWN LIMITATIONS
         problematic_variations = [
             (f"{base_url}#overview", "Fragment gets included in summoner name, has_matching_link fails"),
             (f"{base_url}/champions#aatrox", "Fragment with path segment works for most methods"),
         ]
-        
+
         for url, limitation_description in problematic_variations:
             # Region extraction should still work
             assert URLElementExtractor.extract_region(url) == "na", f"Region failed for URL: {url}"
-            
+
             # Document the specific limitations
             summoner_result = URLElementExtractor.extract_summoner(url)
             if "Fragment gets included" in limitation_description:
@@ -606,23 +606,23 @@ class TestRealWorldOpggUrls:
             # Invalid regions
             "https://op.gg/lol/summoners/invalid/TestUser",
             "https://www.op.gg/lol/summoners/xyz/TestUser",
-            
+
             # Wrong domain
             "https://example.com/lol/summoners/na/TestUser",
             "https://opgg.com/lol/summoners/na/TestUser",
-            
+
             # Missing parts
             "https://op.gg/lol/summoners/na/",  # Missing summoner name
             "https://op.gg/lol/summoners//TestUser",  # Missing region
             "https://op.gg/lol/na/TestUser",  # Missing /summoners/
             "https://op.gg/summoners/na/TestUser",  # Missing /lol/
-            
+
             # Malformed URLs
             "https://op.gg/lol/summoners/na",  # Incomplete
             "op.gg/lol/summoners/na/TestUser",  # Missing protocol
             "https://op.gg/lol/summoners/na/TestUser/extra/too/many/segments/here",  # Too many segments
         ]
-        
+
         for url in invalid_urls:
             # Most invalid URLs should return None/False, but some might be caught by legacy patterns
             # We're primarily testing that the methods don't crash
@@ -631,14 +631,14 @@ class TestRealWorldOpggUrls:
                 summoner = URLElementExtractor.extract_summoner(url)
                 has_match = URLElementExtractor.has_matching_link(url)
                 match_history = URLElementExtractor.extract_match_history_link(url)
-                
+
                 # For truly invalid URLs (wrong domain, missing protocol), these should be None/False
                 if "example.com" in url or "opgg.com" in url or not url.startswith("http"):
                     assert region is None, f"Expected None for region in URL: {url}"
                     assert summoner is None, f"Expected None for summoner in URL: {url}"
                     assert has_match is False, f"Expected False for has_matching_link in URL: {url}"
                     assert match_history is None, f"Expected None for match_history in URL: {url}"
-                    
+
             except Exception as e:
                 pytest.fail(f"Method should not crash for URL: {url}, Error: {e}")
 

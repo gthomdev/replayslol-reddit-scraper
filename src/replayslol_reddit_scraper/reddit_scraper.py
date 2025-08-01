@@ -65,7 +65,9 @@ class RedditScraper:
 
     def validate_submissions(self):
         for submission in self.scrape_submissions():
-            if submission.id not in self.checked_submissions and submission.id not in self.published_submissions and submission.summoner not in self.summoners_on_cooldown:
+            if (submission.id not in self.checked_submissions and
+                    submission.id not in self.published_submissions and
+                    submission.summoner not in self.summoners_on_cooldown):
                 self.checked_submissions.add(submission.id)
                 self.summoners_on_cooldown.add(submission.summoner)
                 if submission.has_matching_link():
@@ -111,7 +113,9 @@ class RedditScraper:
                             exception = Exception(f"Submission {submission.id} has no match history link.")
                             raise exception
                         # Insert the submission into the database
-                        insert_query = "INSERT INTO reddit_comments (subreddit, region, summoner_name, submission_id, link, reddit_link) VALUES (%s, %s, %s, %s, %s, %s)"
+                        insert_query = ("INSERT INTO reddit_comments "
+                                        "(subreddit, region, summoner_name, submission_id, link, reddit_link) "
+                                        "VALUES (%s, %s, %s, %s, %s, %s)")
                         values = (submission.subreddit, submission.region, submission.summoner, submission.id,
                                   submission.match_history_link, submission.url)
                         cursor.execute(insert_query, values)
